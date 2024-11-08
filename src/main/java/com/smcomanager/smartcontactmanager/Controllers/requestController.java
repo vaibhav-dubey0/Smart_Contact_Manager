@@ -13,5 +13,9 @@ public String getMethodName() {
     return "index";
 }
 
+@GetMapping("/about")
+public String getAbouut(){
+    return "about";
+}
     
 }
