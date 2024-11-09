@@ -554,3 +554,7 @@ video {
   display: none;
 }
 
+.p-4 {
+  padding: 1rem;
+}
+

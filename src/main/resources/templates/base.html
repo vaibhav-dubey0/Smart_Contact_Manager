@@ -8,8 +8,17 @@
     <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.css" rel="stylesheet" />
 </head>
 <body>
+
+    <ul>
+        <li>
+           <a th:href="/about">About</a>
+        </li>
+        <li>
+            <a th:href="/home">Home</a>
+        </li>
+    </ul>
     <!-- Define the fragment with a content parameter -->
-    <div th:fragment="parent(content)">
+    <div th:fragment="parent(content)" class="p-4">
         <!-- Insert the content passed from child templates here -->
         <div th:replace="${content}"></div>
     </div>
