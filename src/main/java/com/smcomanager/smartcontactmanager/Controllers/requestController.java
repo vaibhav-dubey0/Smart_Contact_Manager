@@ -21,4 +21,8 @@ public String getAbouut(){
     return "about";
 }
     
+@GetMapping("/services")
+public String getServices(){
+    return "services";
+}
 }
