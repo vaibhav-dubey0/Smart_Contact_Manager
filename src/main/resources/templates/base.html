@@ -9,18 +9,7 @@
 </head>
 <body>
 
-    <ul>
-        <li>
-            <a th:href="@{/about}">About</a>
-        </li>
-        <li>
-            <a th:href="@{/}">Home</a>
-        </li>
-
-        <li>
-            <a th:href="@{/services}">Services</a>
-        </li>
-    </ul>
+    <div th:replace="navbar :: navbar"> </div>
 
     <!-- Define the fragment with a content parameter -->
     <div class="p-4">

@@ -10,7 +10,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class requestController {
 
-    @GetMapping("/")
+    @GetMapping("/register")
+public String getSignup(){
+    return "register";
+}
+
+ @GetMapping("/")
 public String getMethodName() {
     return "home";
 }
@@ -25,4 +30,11 @@ public String getAbouut(){
 public String getServices(){
     return "services";
 }
+
+@GetMapping("/contact")
+public String getContact(){
+    return "contact";
+}
+
+
 }
