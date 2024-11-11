@@ -1,15 +1,30 @@
 <!DOCTYPE html>
-<html lang="en" th:fragment="parent(content,title)" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html class="dark" lang="en" 
+   
+th:fragment="parent(content,title,script)"  xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:replace="${title}">Document</title>
     <link rel="stylesheet" th:href="@{'/css/output.css'}" />
     <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.css" rel="stylesheet" />
-</head>
-<body>
 
-    <div th:replace="navbar :: navbar"> </div>
+    <!--   Fount Awsom CDN Link -->
+   
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+     
+</head>
+<body  class="dark:bg-gray-900 bg-gray-100 dark:text-white">
+
+    <!--  user is logged in : navbar -->
+    <div th:if="${loggedInUser}">
+        <div data-th-replace="~{user/user_navbar::user-navbar}"></div>
+      </div>
+
+         <!-- user is not logged : navbar -->
+      <div th:unless="${loggedInUser}">
+        <div data-th-replace="~{navbar :: navbar}"></div>
+      </div>
 
     <!-- Define the fragment with a content parameter -->
     <div class="p-4">
@@ -18,5 +33,6 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
+    <script th:src="@{'/js/script.js'}"></script>
 </body>
 </html>
