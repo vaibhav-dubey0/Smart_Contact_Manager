@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class requestController {
 
-    @GetMapping("/register")
-public String getSignup(){
+@GetMapping("/register")
+    public String getSignup(){
     return "register";
 }
 
