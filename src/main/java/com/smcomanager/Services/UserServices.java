@@ -7,7 +7,7 @@ import com.smcomanager.smartcontactmanager.SCM_Entity.User;
 
 public interface UserServices {
  
-    User savUser(User user);
+    User saveUser(User user);
     List<User> getAllUsers();
     Optional<User> getUserById(String id);
     Optional<User> updateUser(User user);

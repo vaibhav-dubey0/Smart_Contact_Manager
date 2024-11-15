@@ -2,6 +2,7 @@ package com.smcomanager.Services;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,14 +23,18 @@ public class UserServicesImplemtation implements UserServices{
     Logger logger=LoggerFactory.getLogger(this.getClass());
 
     @Override
-    public User savUser(User user) {
+    public User saveUser(User user) {
+
+      String uid=UUID.randomUUID().toString();
+      user.setId(uid);
       return userRepo.save(user);
+      
     }
 
     @Override
     public List<User> getAllUsers() {
-        List<User> u=userRepo.findAll();
-        return u;
+      
+        return userRepo.findAll();
 
     }
 
@@ -66,16 +71,26 @@ public class UserServicesImplemtation implements UserServices{
 
     @Override
     public void deleteUser(String id) {
+
+     User user1=userRepo.findById(id).orElseThrow( () -> new ResorceNotFoundException(" User Not Found "));
+     userRepo.delete(user1);
+
         
     }
 
     @Override
     public boolean isUserExist(String id) {
+
+      User user1=userRepo.findById(id).orElse(null);
+      return user1!=null ? true: false;
        
     }
 
     @Override
     public boolean isUserExistByEmail(String email) {
+
+      User user1=userRepo.findByEmail(email).orElse(null);
+      return user1!=null ? true: false;
        
     }
 
