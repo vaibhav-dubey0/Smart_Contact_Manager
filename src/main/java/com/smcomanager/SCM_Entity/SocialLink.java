@@ -1,4 +1,4 @@
-package com.smcomanager.smartcontactmanager.SCM_Entity;
+package com.smcomanager.SCM_Entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,7 +18,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class SocialLink {
-    
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

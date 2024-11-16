@@ -1,4 +1,4 @@
-package com.smcomanager.smartcontactmanager.SCM_Entity;
+package com.smcomanager.SCM_Entity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +35,7 @@ public class Contact {
     private boolean pavorite=false;
     
    @ManyToOne
-   private User user;
+   private Users user;
 
 
    

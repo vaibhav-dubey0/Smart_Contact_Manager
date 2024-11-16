@@ -1,4 +1,4 @@
-package com.smcomanager.smartcontactmanager.Form_Handler;
+package com.smcomanager.Form_Handler;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

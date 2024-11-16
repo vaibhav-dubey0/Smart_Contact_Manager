@@ -1,23 +1,29 @@
-package com.smcomanager.smartcontactmanager.SCM_Entity;
+package com.smcomanager.SCM_Entity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 
 @Entity
 @Builder
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class Users {
     @Id
     private String id;
     private String name;
@@ -33,7 +39,8 @@ public class User {
     private boolean phoneVerified=false;
 
     // Login Providers   
-
+    
+    @Enumerated(value = EnumType.STRING)
     private Providers provider=Providers.SELF;
     private String providerUserId;
 
@@ -172,14 +179,6 @@ public class User {
     public void setContacts(List<Contact> contacts) {
         this.contacts = contacts;
     }
-
-
-    
-
-
-
-
-    
 
     
 }
