@@ -1,32 +1,46 @@
 package com.smcomanager.Security_Configuration;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+
+import com.smcomanager.Services.Impl.SecurityCoustemUserDetali;
 
 @Configuration
 public class SecurityConfig {
+   
+    @Autowired
+    private SecurityCoustemUserDetali coustemUserDetali;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(); // Configuring BCryptPasswordEncoder
     }
 
+    // @Bean
+    // public UserDetailsService userDetailsService() {
+    //     PasswordEncoder encoder = passwordEncoder(); // Use the encoder here
+
+    //     UserDetails user = User.withUsername("Vaibhav")
+    //                            .password(encoder.encode("Vaibhav@123")) // Encode the password
+    //                            .roles("USER") // Assign roles if required
+    //                            .build();
+
+    //     return new InMemoryUserDetailsManager(user);
+    // }
+
+
     @Bean
-    public UserDetailsService userDetailsService() {
-        PasswordEncoder encoder = passwordEncoder(); // Use the encoder here
+    public DaoAuthenticationProvider authProvider(){
 
-        UserDetails user = User.withUsername("Vaibhav")
-                               .password(encoder.encode("Vaibhav@123")) // Encode the password
-                               .roles("USER") // Assign roles if required
-                               .build();
+        DaoAuthenticationProvider daoAuthenticationProvider=new DaoAuthenticationProvider();
+        daoAuthenticationProvider.setUserDetailsService(coustemUserDetali);
+        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+        return daoAuthenticationProvider;
 
-        return new InMemoryUserDetailsManager(user);
     }
 }
 
