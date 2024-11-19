@@ -52,6 +52,11 @@ public String getServices(){
     return "services";
 }
 
+@GetMapping("/login")
+public String loginPage(){
+    return "login";
+}
+
 @GetMapping("/contact")
 public String getContact(){
     return "contact";

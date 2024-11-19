@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import com.smcomanager.Helper.AppConstent;
 import com.smcomanager.Helper.ResourceNotFoundException;
 import com.smcomanager.Repository.UserRepo;
 import com.smcomanager.SCM_Entity.Users;
@@ -30,6 +32,10 @@ public class UserServiceImplementation implements UserService {
         user.setId(uid);
   
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        user.setRoleList(List.of(AppConstent.ROLE_USER));
+        
+        logger.info(user.getProvider().toString());
 
         return userRepo.save(user);
     }
@@ -87,5 +93,6 @@ public class UserServiceImplementation implements UserService {
     public Users getUserByEmail(String email) {
         return userRepo.findByEmail(email).orElse(null);
     }
+    
 }
 
