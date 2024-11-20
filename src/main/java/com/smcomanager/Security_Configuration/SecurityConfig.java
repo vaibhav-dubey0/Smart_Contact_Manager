@@ -7,70 +7,67 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 
 import com.smcomanager.Services.Impl.SecurityCoustemUserDetali;
 
 @Configuration
 public class SecurityConfig {
-   
+
     @Autowired
     private SecurityCoustemUserDetali coustemUserDetali;
-    
    
-    
+    @Autowired
+    private OAuthAuthenticationSuccessHandler handler;
+
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity
+            .authorizeHttpRequests(auth -> {
+                auth.requestMatchers("/user/**").authenticated();
+                auth.anyRequest().permitAll();
+            })
+            .formLogin(formLogin -> {
+                formLogin.loginPage("/login")
+                         .loginProcessingUrl("/authenticate")
+                         .defaultSuccessUrl("/user/profile", true)
+                        // .failureUrl("/login?error=true")
+                         .usernameParameter("email")
+                         .passwordParameter("password");
 
-        httpSecurity.authorizeHttpRequests( auth-> {
-            auth.requestMatchers("*/user/**").authenticated();
-            auth.anyRequest().permitAll();
-        });
+                     //    formLogin.failureHandler(authFailtureHandler);
+            })
+            .logout(logout -> {
+                logout.logoutUrl("/do-logout")
+                      .logoutSuccessUrl("/login?logout=true")
+                      .deleteCookies("JSESSIONID")
+                      .invalidateHttpSession(true);
+            });
+        
+         
+          // Oauth2 or google lofin 
 
-        httpSecurity.formLogin(formLogin -> {
+          httpSecurity.oauth2Login(oauth ->{
+            oauth.loginPage("/login");
+             oauth.successHandler(handler);
+          });
 
-            //
-            formLogin.loginPage("/login");
-           formLogin.loginProcessingUrl("/authenticate");
-           formLogin.successForwardUrl("/user/dashboard");
-          //  formLogin.failureForwardUrl("/login?error=true");
-          //  formLogin.defaultSuccessUrl("/home");
-            formLogin.usernameParameter("email");
-            formLogin.passwordParameter("password");
-        });
-     
 
         return httpSecurity.build();
-
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(); // Configuring BCryptPasswordEncoder
+        return new BCryptPasswordEncoder();
     }
 
-    // @Bean
-    // public UserDetailsService userDetailsService() {
-    //     PasswordEncoder encoder = passwordEncoder(); // Use the encoder here
-
-    //     UserDetails user = User.withUsername("Vaibhav")
-    //                            .password(encoder.encode("Vaibhav@123")) // Encode the password
-    //                            .roles("USER") // Assign roles if required
-    //                            .build();
-
-    //     return new InMemoryUserDetailsManager(user);
-    // }
-
-
     @Bean
-    public DaoAuthenticationProvider authProvider(){
-
-        DaoAuthenticationProvider daoAuthenticationProvider=new DaoAuthenticationProvider();
+    public DaoAuthenticationProvider authProvider() {
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
         daoAuthenticationProvider.setUserDetailsService(coustemUserDetali);
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
         return daoAuthenticationProvider;
-
     }
 }
+
 

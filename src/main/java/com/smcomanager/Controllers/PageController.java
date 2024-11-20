@@ -41,6 +41,10 @@ public String getMethodName() {
     return "home";
 }
 
+@GetMapping("/home")
+public String getHome() {
+    return "home";
+}
 
 @GetMapping("/about")
 public String getAbouut(){
