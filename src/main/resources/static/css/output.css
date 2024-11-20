@@ -866,10 +866,6 @@ video {
   padding-bottom: 0.5rem;
 }
 
-.pt-20 {
-  padding-top: 5rem;
-}
-
 .text-center {
   text-align: center;
 }
@@ -877,11 +873,6 @@ video {
 .text-2xl {
   font-size: 1.5rem;
   line-height: 2rem;
-}
-
-.text-5xl {
-  font-size: 3rem;
-  line-height: 1;
 }
 
 .text-base {
@@ -1041,12 +1032,6 @@ video {
 
 .focus\:ring-offset-gray-200:focus {
   --tw-ring-offset-color: #e5e7eb;
-}
-
-@media (min-width: 640px) {
-  .sm\:pl-64 {
-    padding-left: 16rem;
-  }
 }
 
 @media (min-width: 768px) {
