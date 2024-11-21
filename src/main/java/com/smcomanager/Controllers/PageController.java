@@ -17,6 +17,8 @@ import com.smcomanager.Services.UserService;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 @Controller
@@ -41,6 +43,11 @@ public String getMethodName() {
     return "home";
 }
 
+@GetMapping("/home")
+public String getHome() {
+    return "home";
+}
+
 
 @GetMapping("/about")
 public String getAbouut(){
@@ -61,6 +68,12 @@ public String loginPage(){
 public String getContact(){
     return "contact";
 }
+
+@PostMapping("/logout")
+public String postMethodName() {
+    return "redirect:login";
+}
+
 
    @PostMapping("/do-register")
    public String postMethodName(@Valid @ModelAttribute UserForm userForm,BindingResult bindingResult,HttpSession session) {
