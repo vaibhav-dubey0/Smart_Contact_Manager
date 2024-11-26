@@ -2,38 +2,56 @@ package com.smcomanager.Helper;
 
 
 import java.security.Principal;
-
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 public class UserDetailHelper {
 
-    public static String getEmailOfLoginUser(Authentication authention){
+    @Value("${server.baseUrl}")
+    private String baseUrl;
 
-        Principal principal=(Principal)authention.getPrincipal();
+    public static String getEmailOfLoggedInUser(Authentication authentication) {
 
-        if(principal instanceof OAuth2AuthenticatedPrincipal){
+        // agar email is password se login kiya hai to : email kaise nikalenge
+        if (authentication instanceof OAuth2AuthenticationToken) {
 
-            var OAuth2AuthenticationToken=(OAuth2AuthenticationToken)authention;
-            var clintId=OAuth2AuthenticationToken.getAuthorizedClientRegistrationId();
+            var aOAuth2AuthenticationToken = (OAuth2AuthenticationToken) authentication;
+            var clientId = aOAuth2AuthenticationToken.getAuthorizedClientRegistrationId();
 
-            if(clintId.equalsIgnoreCase("google")){
+            var oauth2User = (OAuth2User) authentication.getPrincipal();
+            String username = "";
 
+            if (clientId.equalsIgnoreCase("google")) {
+
+                // sign with google
+                System.out.println("Getting email from google");
+                username = oauth2User.getAttribute("email").toString();
+
+            } else if (clientId.equalsIgnoreCase("github")) {
+
+                // sign with github
+                System.out.println("Getting email from github");
+                username = oauth2User.getAttribute("email") != null ? oauth2User.getAttribute("email").toString()
+                        : oauth2User.getAttribute("login").toString() + "@gmail.com";
             }
 
-            elseif{
+            // sign with facebook
+            return username;
 
-            }
-
-             return "";  
-
+        } else {
+            System.out.println("Getting data from local database");
+            return authentication.getName();
         }
 
-        else{
+    }
 
-            return principal.getName();
-        }
+    public String getLinkForEmailVerificatiton(String emailToken) {
+
+        return this.baseUrl + "/auth/verify-email?token=" + emailToken;
 
     }
     
