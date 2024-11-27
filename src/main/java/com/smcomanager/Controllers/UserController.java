@@ -14,6 +14,7 @@ import com.smcomanager.SCM_Entity.Users;
 import com.smcomanager.Services.UserService;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 
 
@@ -25,6 +26,17 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    // @ModelAttribute
+    // public void addLoggedInUserInformation(Model model,Authentication authentication){
+
+    //     String username=UserDetailHelper.getEmailOfLoggedInUser(authentication);
+
+    //     Users user= userService.getUserByEmail(username);
+    //     model.addAttribute("loggedInUser", user);
+       
+    //          logger.info(username); 
+    // }
 
 @GetMapping("/dashboard")
 public String getDashboard() {
