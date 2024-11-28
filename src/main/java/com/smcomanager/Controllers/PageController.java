@@ -68,7 +68,7 @@ public String getContact(){
     return "contact";
 }
 
-@PostMapping("/logout")
+@PostMapping("/do-logout")
 public String postMethodName() {
     return "redirect:login";
 }
