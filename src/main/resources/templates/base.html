@@ -2,22 +2,22 @@
 <html
   class="light"
   lang="en"
-  th:fragment="parent(content, title, script)"
+  th:fragment="parent(content,title,script)"
   xmlns:th="http://www.thymeleaf.org"
 >
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title th:text="${title}">SCM</title>
+    <title data-th-replace="${title}">SCM</title>
 
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css"
       rel="stylesheet"
     />
-    <link rel="stylesheet" th:href="@{/css/output.css}" />
-    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" data-th-href="@{'/css/output.css'}" />
+    <link rel="stylesheet" data-th-href="@{'/css/style.css'}" />
 
-    <!-- Font Awesome -->
+    <!-- font awesome -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
@@ -27,31 +27,30 @@
     />
   </head>
   <body class="dark:bg-gray-900 bg-gray-100 dark:text-white">
-    <!-- Common Header -->
+    <!-- commona header -->
 
-    <!-- User is logged in: navbar -->
+    <!--  user is logged in : navbar -->
     <div th:if="${loggedInUser}">
-      <div th:replace="user/user_navbar :: user-navbar"></div>
+      <div data-th-replace="~{user/user_navbar::user-navbar}"></div>
     </div>
 
-    <!-- User is not logged in: navbar -->
+    <!-- user is not logged : navbar -->
     <div th:unless="${loggedInUser}">
-      <div th:replace="navbar :: navbar"></div>
+      <div data-th-replace="~{navbar :: navbar}"></div>
     </div>
 
-    <!-- Main Content -->
-    <div>
-      <section th:replace="${content}"></section>
+    <!-- main content -->
+    <div class="">
+      <section data-th-replace="${content}"></section>
     </div>
+    <!-- flow bite content -->
 
-    <!-- Flowbite Content -->
-
-    <!-- Common Footer -->
+    <!-- common footer -->
     <!-- <footer class="p-4">Footer: Learn Code With Durgesh</footer> -->
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script th:src="@{/js/script.js}"></script>
-    <th:block th:replace="${script}"></th:block>
+    <script data-th-src="@{'/js/script.js'}"></script>
+    <th:block data-th-replace="${script}"></th:block>
   </body>
 </html>

@@ -1,10 +1,14 @@
 package com.smcomanager.Services.Impl;
 
 import java.util.List;
+import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import com.smcomanager.Helper.ResourceNotFoundException;
+import com.smcomanager.Repository.ContactRepo;
 import com.smcomanager.SCM_Entity.Contact;
 import com.smcomanager.SCM_Entity.Users;
 import com.smcomanager.Services.ContactService;
@@ -12,66 +16,63 @@ import com.smcomanager.Services.ContactService;
 @Service
 public class ContactServiceImpl implements ContactService{
 
+    @Autowired
+    private ContactRepo contactRepo;
+
     @Override
     public Contact save(Contact contact) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'save'");
+       String userId=UUID.randomUUID().toString();
+       contact.setId(userId);
+       return contactRepo.save(contact);
     }
 
     @Override
     public Contact update(Contact contact) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+           
     }
 
     @Override
     public List<Contact> getAll() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAll'");
+        return contactRepo.findAll();
     }
 
     @Override
     public Contact getById(String id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getById'");
+       return contactRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Id not Found with provided id" + id));
     }
 
     @Override
     public void delete(String id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+
+      contactRepo.deleteById(id);
+
     }
 
     @Override
     public Page<Contact> searchByName(String nameKeyword, int size, int page, String sortBy, String order, Users user) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'searchByName'");
+      
     }
 
     @Override
     public Page<Contact> searchByEmail(String emailKeyword, int size, int page, String sortBy, String order,
             Users user) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'searchByEmail'");
+       
     }
 
     @Override
     public Page<Contact> searchByPhoneNumber(String phoneNumberKeyword, int size, int page, String sortBy, String order,
             Users user) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'searchByPhoneNumber'");
+       
     }
 
     @Override
     public List<Contact> getByUserId(String userId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getByUserId'");
+       return contactRepo.findByUserId(userId);
     }
 
     @Override
     public Page<Contact> getByUser(Users user, int page, int size, String sortField, String sortDirection) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getByUser'");
+        
     }
     
 }

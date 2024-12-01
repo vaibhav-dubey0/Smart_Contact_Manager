@@ -3,7 +3,6 @@ package com.smcomanager.Services;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import com.smcomanager.SCM_Entity.Contact;
 import com.smcomanager.SCM_Entity.Users;
 
