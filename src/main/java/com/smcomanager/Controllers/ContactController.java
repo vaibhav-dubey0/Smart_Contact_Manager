@@ -1,5 +1,8 @@
 package com.smcomanager.Controllers;
 
+import org.springframework.validation.BindingResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -19,11 +22,13 @@ import com.smcomanager.Services.ContactService;
 import com.smcomanager.Services.UserService;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/user/contacts")
 public class ContactController {
     
+    private Logger logger=LoggerFactory.getLogger(ContactController.class);
     @Autowired
     private ContactService contactService;
    
@@ -42,9 +47,23 @@ public class ContactController {
     }
 
     @PostMapping("/add")
-    public String saveContact(@ModelAttribute ContactForm contactForm,Authentication authentication,HttpSession session){
+    public String saveContact(@Valid @ModelAttribute ContactForm contactForm, BindingResult result,
+    Authentication authentication, HttpSession session){
 
          String userName=UserDetailHelper.getEmailOfLoggedInUser(authentication);
+
+         // Add Validation 
+
+         if(result.hasErrors()){
+            result.getAllErrors().forEach(error -> logger.info(error.toString()));
+             
+            session.setAttribute("message", Message.builder()
+                    .content("Please correct the following errors")
+                    .type(MessageType.RED)
+                    .build());
+
+            return "user/add_contact";
+         }
            
         Contact contact=new Contact();
 
