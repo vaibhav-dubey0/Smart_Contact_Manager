@@ -1,6 +1,9 @@
 package com.smcomanager.Controllers;
 
 import org.springframework.validation.BindingResult;
+
+import java.util.UUID;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +22,7 @@ import com.smcomanager.Helper.UserDetailHelper;
 import com.smcomanager.SCM_Entity.Contact;
 import com.smcomanager.SCM_Entity.Users;
 import com.smcomanager.Services.ContactService;
+import com.smcomanager.Services.ImageService;
 import com.smcomanager.Services.UserService;
 
 import jakarta.servlet.http.HttpSession;
@@ -27,6 +31,9 @@ import jakarta.validation.Valid;
 @Controller
 @RequestMapping("/user/contacts")
 public class ContactController {
+   
+    @Autowired
+    private ImageService imageService;
     
     private Logger logger=LoggerFactory.getLogger(ContactController.class);
     @Autowired
@@ -78,6 +85,14 @@ public class ContactController {
         contact.setLinkedInLink(contactForm.getLinkedInLink());
         contact.setWebsiteLink(contactForm.getWebsiteLink());
         contact.setUser(users);
+
+        if (contactForm.getContactImage() != null && !contactForm.getContactImage().isEmpty()) {
+            String filename = UUID.randomUUID().toString();
+            String fileURL = imageService.uploadImage(contactForm.getContactImage(), filename);
+            contact.setPicture(fileURL);
+            contact.setCloudinaryImagePublicId(filename);
+
+        }
 
         contactService.save(contact);
 
