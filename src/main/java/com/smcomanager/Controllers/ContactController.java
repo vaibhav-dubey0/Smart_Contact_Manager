@@ -96,7 +96,6 @@ public class ContactController {
 
         contactService.save(contact);
 
-         System.out.println(contact);
 
          session.setAttribute("message",
                 Message.builder()
