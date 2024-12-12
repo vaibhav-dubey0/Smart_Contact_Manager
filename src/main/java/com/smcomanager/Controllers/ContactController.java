@@ -43,12 +43,18 @@ public class ContactController {
     private UserService userService;
 
     @GetMapping("/add")
-    public String addContactView(Model model){
+    public String addContactView(Model model,Authentication authentication){
+
+        String userName = UserDetailHelper.getEmailOfLoggedInUser(authentication);
+        Users loggedInUser = userService.getUserByEmail(userName);
+    
+        // Add logged-in user to the model
+        model.addAttribute("loggedInUser", loggedInUser);
 
         // Model attribute use to recieve data from form in blank 
-  ContactForm contactForm=new ContactForm();
-  contactForm.setFavorite(true);
-  model.addAttribute("contactForm", contactForm);
+       ContactForm contactForm=new ContactForm();
+    contactForm.setFavorite(true);
+         model.addAttribute("contactForm", contactForm);
 
         return "user/add_contact";
     }
@@ -56,9 +62,10 @@ public class ContactController {
     @PostMapping("/add")
     public String saveContact(@Valid @ModelAttribute ContactForm contactForm, BindingResult result,
     Authentication authentication, HttpSession session){
+        
 
          String userName=UserDetailHelper.getEmailOfLoggedInUser(authentication);
-
+         Users users=userService.getUserByEmail(userName);
          // Add Validation 
 
          if(result.hasErrors()){
@@ -74,7 +81,7 @@ public class ContactController {
            
         Contact contact=new Contact();
 
-         Users users=userService.getUserByEmail(userName);
+      
 
         contact.setName(contactForm.getName());
         contact.setEmail(contactForm.getEmail());
@@ -94,7 +101,7 @@ public class ContactController {
 
         }
 
-      //  contactService.save(contact);
+        contactService.save(contact);
 
 
          session.setAttribute("message",
