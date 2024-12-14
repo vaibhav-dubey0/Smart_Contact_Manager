@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,8 +15,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.smcomanager.Form_Handler.ContactForm;
+import com.smcomanager.Form_Handler.ContactSearchForm;
+import com.smcomanager.Helper.AppConstent;
 import com.smcomanager.Helper.Message;
 import com.smcomanager.Helper.MessageType;
 import com.smcomanager.Helper.UserDetailHelper;
@@ -113,5 +117,35 @@ public class ContactController {
         return "redirect:/user/contacts/add";
 
     }
+    
+    @RequestMapping
+    public String viewContacts(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = AppConstent.PAGE_SIZE + "") int size,
+            @RequestParam(value = "sortBy", defaultValue = "name") String sortBy,
+            @RequestParam(value = "direction", defaultValue = "asc") String direction, Model model,
+            Authentication authentication) {
+
+        // load all the user contacts
+        String username = UserDetailHelper.getEmailOfLoggedInUser(authentication);
+        Users loggedInUser = userService.getUserByEmail(username);
+    
+        // Add logged-in user to the model
+        model.addAttribute("loggedInUser", loggedInUser);
+
+        Users user = userService.getUserByEmail(username);
+
+        Page<Contact> pageContact = contactService.getByUser(user, page, size, sortBy, direction);
+
+        model.addAttribute("pageContact", pageContact);
+        model.addAttribute("pageSize", AppConstent.PAGE_SIZE);
+
+        model.addAttribute("contactSearchForm", new ContactSearchForm());
+
+        return "user/contacts";
+    }
+
+
+
     
 }
