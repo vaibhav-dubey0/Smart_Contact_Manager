@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -143,6 +144,147 @@ public class ContactController {
         model.addAttribute("contactSearchForm", new ContactSearchForm());
 
         return "user/contacts";
+    }
+
+    @RequestMapping("/search")
+    public String searchHandler(
+
+            @ModelAttribute ContactSearchForm contactSearchForm,
+            @RequestParam(value = "size", defaultValue = AppConstent.PAGE_SIZE + "") int size,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "sortBy", defaultValue = "name") String sortBy,
+            @RequestParam(value = "direction", defaultValue = "asc") String direction,
+            Model model,
+            Authentication authentication) {
+
+                String username = UserDetailHelper.getEmailOfLoggedInUser(authentication);
+                Users loggedInUser = userService.getUserByEmail(username);
+            
+                // Add logged-in user to the model
+                model.addAttribute("loggedInUser", loggedInUser);
+
+        logger.info("field {} keyword {}", contactSearchForm.getField(), contactSearchForm.getValue());
+
+        var user = userService.getUserByEmail(UserDetailHelper.getEmailOfLoggedInUser(authentication));
+
+        Page<Contact> pageContact = null;
+        if (contactSearchForm.getField().equalsIgnoreCase("name")) {
+            pageContact = contactService.searchByName(contactSearchForm.getValue(), size, page, sortBy, direction,
+                    user);
+        } else if (contactSearchForm.getField().equalsIgnoreCase("email")) {
+            pageContact = contactService.searchByEmail(contactSearchForm.getValue(), size, page, sortBy, direction,
+                    user);
+        } else if (contactSearchForm.getField().equalsIgnoreCase("phone")) {
+            pageContact = contactService.searchByPhoneNumber(contactSearchForm.getValue(), size, page, sortBy,
+                    direction, user);
+        }
+
+        logger.info("pageContact {}", pageContact);
+
+        model.addAttribute("contactSearchForm", contactSearchForm);
+
+        model.addAttribute("pageContact", pageContact);
+
+        model.addAttribute("pageSize", AppConstent.PAGE_SIZE);
+
+        return "user/search";
+    }
+
+
+
+     @RequestMapping("/delete/{contactId}")
+    public String deleteContact(
+            @PathVariable("contactId") String contactId,
+            HttpSession session) {
+        contactService.delete(contactId);
+        logger.info("contactId {} deleted", contactId);
+
+        session.setAttribute("message",
+                Message.builder()
+                        .content("Contact is Deleted successfully !! ")
+                        .type(MessageType.GREEN)
+                        .build()
+
+        );
+
+        return "redirect:/user/contacts";
+    }
+
+    // update contact form view
+    @GetMapping("/view/{contactId}")
+    public String updateContactFormView(
+            @PathVariable("contactId") String contactId,
+            Model model,Authentication authentication) {
+
+                String userName = UserDetailHelper.getEmailOfLoggedInUser(authentication);
+        Users loggedInUser = userService.getUserByEmail(userName);
+    
+        // Add logged-in user to the model
+        model.addAttribute("loggedInUser", loggedInUser);
+
+
+
+        var contact = contactService.getById(contactId);
+        ContactForm contactForm = new ContactForm();
+        contactForm.setName(contact.getName());
+        contactForm.setEmail(contact.getEmail());
+        contactForm.setPhoneNumber(contact.getPhoneNumber());
+        contactForm.setAddress(contact.getAddress());
+        contactForm.setDescription(contact.getDescription());
+        contactForm.setFavorite(contact.isFavorite());
+        contactForm.setWebsiteLink(contact.getWebsiteLink());
+        contactForm.setLinkedInLink(contact.getLinkedInLink());
+        contactForm.setPicture(contact.getPicture());
+        ;
+        model.addAttribute("contactForm", contactForm);
+        model.addAttribute("contactId", contactId);
+
+        return "user/update_contact_view";
+    }
+
+    @PostMapping("/update/{contactId}")
+    public String updateContact(@PathVariable("contactId") String contactId,
+            @Valid @ModelAttribute ContactForm contactForm,
+            BindingResult bindingResult,
+            Model model) {
+
+
+        // update the contact
+        if (bindingResult.hasErrors()) {
+            return "user/update_contact_view";
+        }
+
+        var con = contactService.getById(contactId);
+        con.setId(contactId);
+        con.setName(contactForm.getName());
+        con.setEmail(contactForm.getEmail());
+        con.setPhoneNumber(contactForm.getPhoneNumber());
+        con.setAddress(contactForm.getAddress());
+        con.setDescription(contactForm.getDescription());
+        con.setFavorite(contactForm.isFavorite());
+        con.setWebsiteLink(contactForm.getWebsiteLink());
+        con.setLinkedInLink(contactForm.getLinkedInLink());
+
+        // process image:
+
+        if (contactForm.getContactImage() != null && !contactForm.getContactImage().isEmpty()) {
+            logger.info("file is not empty");
+            String fileName = UUID.randomUUID().toString();
+            String imageUrl = imageService.uploadImage(contactForm.getContactImage(), fileName);
+            con.setCloudinaryImagePublicId(fileName);
+            con.setPicture(imageUrl);
+            contactForm.setPicture(imageUrl);
+
+        } else {
+            logger.info("file is empty");
+        }
+
+        var updateCon = contactService.update(con);
+        logger.info("updated contact {}", updateCon);
+
+        model.addAttribute("message", Message.builder().content("Contact Updated !!").type(MessageType.GREEN).build());
+
+        return "redirect:/user/contacts";
     }
 
 
