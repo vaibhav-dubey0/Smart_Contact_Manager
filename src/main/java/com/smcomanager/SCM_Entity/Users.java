@@ -24,6 +24,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.AccessLevel;
 
 
 @Entity
@@ -37,12 +38,14 @@ public class Users implements UserDetails{
     private String id;
     private String name;
     private String email;
+
+    @Getter(AccessLevel.NONE)
     private String password;
     private String about;
     private String profilePic;
     private String phoneNumber;
 
-
+    @Getter(value = AccessLevel.NONE)
     private boolean enabled=false;
     private boolean emailVerified=false;
     private boolean phoneVerified=false;
@@ -62,6 +65,8 @@ public class Users implements UserDetails{
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roleList=new ArrayList<>();
+
+    private String emailToken;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -101,7 +106,6 @@ public class Users implements UserDetails{
     public String getPassword() {
         return this.password;
     }
-
 
     
 }

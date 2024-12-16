@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.smcomanager.Services.Impl.SecurityCoustemUserDetali;
 
@@ -24,26 +25,29 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 
         httpSecurity
-            .authorizeHttpRequests(auth -> {
-                auth.requestMatchers("/user/**").authenticated(); // Corrected the matcher syntax
-                auth.anyRequest().permitAll();
-            })
-            .formLogin(formLogin -> {
-                formLogin.loginPage("/login")
-                        .loginProcessingUrl("/authenticate")
-                        .defaultSuccessUrl("/user/profile", true) // Ensures this URL is always used after login
-                       // .failureUrl("/login?error=true") // Uncommented and corrected failure URL
-                        .usernameParameter("email")
-                        .passwordParameter("password");
-            })
-            .oauth2Login(oauth -> {
-                oauth.loginPage("/login");
-                oauth.successHandler(handler);
-            })
-            .logout(logout -> {
-                logout.logoutUrl("/do-logout")
-                      .logoutSuccessUrl("/login?logout=true");
-            });
+                .authorizeHttpRequests(auth -> {
+                    auth.requestMatchers("/user/**").authenticated(); // Corrected the matcher syntax
+                    auth.anyRequest().permitAll();
+                })
+                .formLogin(formLogin -> {
+                    formLogin.loginPage("/login")
+                            .loginProcessingUrl("/authenticate")
+                            .defaultSuccessUrl("/user/profile", true) // Ensures this URL is always used after login
+                            // .failureUrl("/login?error=true") // Uncommented and corrected failure URL
+                            .usernameParameter("email")
+                            .passwordParameter("password");
+                })
+                .oauth2Login(oauth -> {
+                    oauth.loginPage("/login");
+                    oauth.successHandler(handler);
+                })
+                .logout(logout -> {
+                    logout.logoutUrl("/do-logout")
+                            .logoutSuccessUrl("/login?logout=true")
+                            .permitAll();
+                    ;
+                })
+                .logout(logout -> logout.logoutRequestMatcher(new AntPathRequestMatcher("/do-logout", "GET")));;
 
         return httpSecurity.build();
     }

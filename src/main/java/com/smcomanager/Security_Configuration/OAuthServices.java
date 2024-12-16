@@ -15,7 +15,6 @@ import com.smcomanager.Helper.AppConstent;
 import com.smcomanager.Repository.UserRepo;
 import com.smcomanager.SCM_Entity.Providers;
 import com.smcomanager.SCM_Entity.Users;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -53,7 +52,7 @@ public class OAuthServices implements AuthenticationSuccessHandler {
         user.setId(UUID.randomUUID().toString());
         user.setRoleList(List.of(AppConstent.ROLE_USER));
         user.setEmailVerified(true);
-        user.setEnable(true);
+        user.setEnabled(true);
         user.setPassword("dummy");
         if (authorizedClientRegistrationId.equalsIgnoreCase("google")) {
 

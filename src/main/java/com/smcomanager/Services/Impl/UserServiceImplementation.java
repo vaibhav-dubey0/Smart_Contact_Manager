@@ -63,7 +63,7 @@ public class UserServiceImplementation implements UserService {
         existingUser.setPhoneNumber(user.getPhoneNumber());
         existingUser.setProfilePic(user.getProfilePic());
         existingUser.setEmailVerified(user.isEmailVerified());
-        existingUser.setEnable(user.isEnable());
+        existingUser.setEnabled(user.isEnabled());
         existingUser.setPhoneVerified(user.isPhoneVerified());
         existingUser.setProviderUserId(user.getProviderUserId());
         existingUser.setProvider(user.getProvider());
