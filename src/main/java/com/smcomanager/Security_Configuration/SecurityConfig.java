@@ -21,8 +21,11 @@ public class SecurityConfig {
     @Autowired
     private OAuthServices handler;
 
+    @Autowired
+    private AuthFailtureHandler authFailtureHandler;
+
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 
         httpSecurity
                 .authorizeHttpRequests(auth -> {
@@ -33,9 +36,9 @@ public class SecurityConfig {
                     formLogin.loginPage("/login")
                             .loginProcessingUrl("/authenticate")
                             .defaultSuccessUrl("/user/profile", true) // Ensures this URL is always used after login
-                            // .failureUrl("/login?error=true") // Uncommented and corrected failure URL
                             .usernameParameter("email")
-                            .passwordParameter("password");
+                            .passwordParameter("password")
+                            .failureHandler(authFailtureHandler);
                 })
                 .oauth2Login(oauth -> {
                     oauth.loginPage("/login");
@@ -47,18 +50,18 @@ public class SecurityConfig {
                             .permitAll();
                     ;
                 })
-                .logout(logout -> logout.logoutRequestMatcher(new AntPathRequestMatcher("/do-logout", "GET")));;
+                .logout(logout -> logout.logoutRequestMatcher(new AntPathRequestMatcher("/do-logout", "GET")));
 
         return httpSecurity.build();
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public DaoAuthenticationProvider authProvider() {
+    DaoAuthenticationProvider authProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
         daoAuthenticationProvider.setUserDetailsService(coustemUserDetali);
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());

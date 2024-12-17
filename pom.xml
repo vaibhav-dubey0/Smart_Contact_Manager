@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.3.6</version>
+		<version>3.4.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.smcomanager</groupId>
@@ -19,6 +19,7 @@
 	</licenses>
 	<developers>
 		<developer/>
+		
 	</developers>
 	<scm>
 		<connection/>
@@ -94,11 +95,6 @@
            <artifactId>modelmapper</artifactId>
 		    <version>3.1.1</version>
        </dependency>
-
-     <dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-mail</artifactId>
-   </dependency>
 
 	   <dependency>
     <groupId>com.cloudinary</groupId>

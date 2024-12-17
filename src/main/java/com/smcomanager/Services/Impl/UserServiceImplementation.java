@@ -11,8 +11,10 @@ import org.springframework.stereotype.Service;
 
 import com.smcomanager.Helper.AppConstent;
 import com.smcomanager.Helper.ResourceNotFoundException;
+import com.smcomanager.Helper.UserDetailHelper;
 import com.smcomanager.Repository.UserRepo;
 import com.smcomanager.SCM_Entity.Users;
+import com.smcomanager.Services.EmailService;
 import com.smcomanager.Services.UserService;
 
 @Service
@@ -20,29 +22,40 @@ public class UserServiceImplementation implements UserService {
 
     @Autowired
     private UserRepo userRepo;
-    
+
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private EmailService emailService;
+
     private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+
+    @Autowired
+    private  UserDetailHelper helper;
 
     @Override
     public Users saveUser(Users user) {
-        String uid = UUID.randomUUID().toString();
-        user.setId(uid);
-  
+        // user id : have to generate
+        String userId = UUID.randomUUID().toString();
+        user.setId(userId);
+        // password encode
+        // user.setPassword(userId);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
+        // set the user role
+
         user.setRoleList(List.of(AppConstent.ROLE_USER));
-        
+
         logger.info(user.getProvider().toString());
+        String emailToken = UUID.randomUUID().toString();
+        user.setEmailToken(emailToken);
+        Users savedUser = userRepo.save(user);
+        String emailLink = helper.getLinkForEmailVerificatiton(emailToken);
+        emailService.sendEmail(savedUser.getEmail(), "Verify Account : Smart  Contact Manager", emailLink);
+        return savedUser;
 
-        return userRepo.save(user);
-    }
-
-    @Override
-    public List<Users> getAllUsers() {
-        return userRepo.findAll();
     }
 
     @Override
@@ -52,47 +65,57 @@ public class UserServiceImplementation implements UserService {
 
     @Override
     public Optional<Users> updateUser(Users user) {
-        Users existingUser = userRepo.findById(user.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("User Not Found"));
 
-        existingUser.setName(user.getName());
-        existingUser.setEmail(user.getEmail());
-        existingUser.setAbout(user.getAbout());
-        existingUser.setContacts(user.getContacts());
-        existingUser.setPassword(user.getPassword());
-        existingUser.setPhoneNumber(user.getPhoneNumber());
-        existingUser.setProfilePic(user.getProfilePic());
-        existingUser.setEmailVerified(user.isEmailVerified());
-        existingUser.setEnabled(user.isEnabled());
-        existingUser.setPhoneVerified(user.isPhoneVerified());
-        existingUser.setProviderUserId(user.getProviderUserId());
-        existingUser.setProvider(user.getProvider());
+        Users user2 = userRepo.findById(user.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        // update karenge user2 from user
+        user2.setName(user.getName());
+        user2.setEmail(user.getEmail());
+        user2.setPassword(user.getPassword());
+        user2.setAbout(user.getAbout());
+        user2.setPhoneNumber(user.getPhoneNumber());
+        user2.setProfilePic(user.getProfilePic());
+        user2.setEnabled(user.isEnabled());
+        user2.setEmailVerified(user.isEmailVerified());
+        user2.setPhoneVerified(user.isPhoneVerified());
+        user2.setProvider(user.getProvider());
+        user2.setProviderUserId(user.getProviderUserId());
+        // save the user in database
+        Users save = userRepo.save(user2);
+        return Optional.ofNullable(save);
 
-        Users updatedUser = userRepo.save(existingUser);
-        return Optional.ofNullable(updatedUser);
     }
 
     @Override
     public void deleteUser(String id) {
-        Users user = userRepo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User Not Found"));
-        userRepo.delete(user);
+        Users user2 = userRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        userRepo.delete(user2);
+
     }
 
     @Override
-    public boolean isUserExist(String id) {
-        return userRepo.existsById(id);
+    public boolean isUserExist(String userId) {
+        Users user2 = userRepo.findById(userId).orElse(null);
+        return user2 != null ? true : false;
     }
 
     @Override
     public boolean isUserExistByEmail(String email) {
-        return userRepo.findByEmail(email).isPresent();
+        Users user = userRepo.findByEmail(email).orElse(null);
+        return user != null ? true : false;
+    }
+
+    @Override
+    public List<Users> getAllUsers() {
+        return userRepo.findAll();
     }
 
     @Override
     public Users getUserByEmail(String email) {
         return userRepo.findByEmail(email).orElse(null);
+
     }
-    
+
 }
 

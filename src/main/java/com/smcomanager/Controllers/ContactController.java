@@ -121,10 +121,10 @@ public class ContactController {
     
     @RequestMapping
     public String viewContacts(
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = AppConstent.PAGE_SIZE + "") int size,
-            @RequestParam(value = "sortBy", defaultValue = "name") String sortBy,
-            @RequestParam(value = "direction", defaultValue = "asc") String direction, Model model,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = AppConstent.PAGE_SIZE + "") int size,
+            @RequestParam(defaultValue = "name") String sortBy,
+            @RequestParam(defaultValue = "asc") String direction, Model model,
             Authentication authentication) {
 
         // load all the user contacts
@@ -150,10 +150,10 @@ public class ContactController {
     public String searchHandler(
 
             @ModelAttribute ContactSearchForm contactSearchForm,
-            @RequestParam(value = "size", defaultValue = AppConstent.PAGE_SIZE + "") int size,
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "sortBy", defaultValue = "name") String sortBy,
-            @RequestParam(value = "direction", defaultValue = "asc") String direction,
+            @RequestParam(defaultValue = AppConstent.PAGE_SIZE + "") int size,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "name") String sortBy,
+            @RequestParam(defaultValue = "asc") String direction,
             Model model,
             Authentication authentication) {
 
@@ -194,7 +194,7 @@ public class ContactController {
 
      @RequestMapping("/delete/{contactId}")
     public String deleteContact(
-            @PathVariable("contactId") String contactId,
+            @PathVariable String contactId,
             HttpSession session) {
         contactService.delete(contactId);
         logger.info("contactId {} deleted", contactId);
@@ -213,7 +213,7 @@ public class ContactController {
     // update contact form view
     @GetMapping("/view/{contactId}")
     public String updateContactFormView(
-            @PathVariable("contactId") String contactId,
+            @PathVariable String contactId,
             Model model,Authentication authentication) {
 
                 String userName = UserDetailHelper.getEmailOfLoggedInUser(authentication);
@@ -243,7 +243,7 @@ public class ContactController {
     }
 
     @PostMapping("/update/{contactId}")
-    public String updateContact(@PathVariable("contactId") String contactId,
+    public String updateContact(@PathVariable String contactId,
             @Valid @ModelAttribute ContactForm contactForm,
             BindingResult bindingResult,
             Model model) {

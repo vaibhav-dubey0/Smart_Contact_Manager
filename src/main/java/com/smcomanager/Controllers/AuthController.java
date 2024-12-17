@@ -25,7 +25,7 @@ public class AuthController {
 
     @GetMapping("/verify-email")
     public String verifyEmail(
-            @RequestParam("token") String token, HttpSession session) {
+            @RequestParam String token, HttpSession session) {
 
         Users user = userRepo.findByEmailToken(token).orElse(null);
 

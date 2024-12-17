@@ -20,7 +20,7 @@ public class AppConfig {
     private String apiSecret;
 
     @Bean
-    public Cloudinary cloudinary() {
+    Cloudinary cloudinary() {
 
         return new Cloudinary(
 

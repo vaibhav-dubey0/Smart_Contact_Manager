@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UserDetailHelper {
 
     @Value("${server.baseUrl}")
@@ -13,9 +15,7 @@ public class UserDetailHelper {
     public static String getEmailOfLoggedInUser(Authentication authentication) {
 
         // agar email is password se login kiya hai to : email kaise nikalenge
-        if (authentication instanceof OAuth2AuthenticationToken) {
-
-            var aOAuth2AuthenticationToken = (OAuth2AuthenticationToken) authentication;
+        if (authentication instanceof OAuth2AuthenticationToken aOAuth2AuthenticationToken) {
             var clientId = aOAuth2AuthenticationToken.getAuthorizedClientRegistrationId();
 
             var oauth2User = (OAuth2User) authentication.getPrincipal();

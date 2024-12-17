@@ -89,7 +89,7 @@ public String postMethodName() {
         user.setPassword(userForm.getPassword());
         user.setAbout(userForm.getAbout());
         user.setPhoneNumber(userForm.getPhoneNumber());
-        // user.setEnabled(false);
+         user.setEnabled(false);
         user.setProfilePic(
                 "/images/Cover_Photo.jpg");
 
