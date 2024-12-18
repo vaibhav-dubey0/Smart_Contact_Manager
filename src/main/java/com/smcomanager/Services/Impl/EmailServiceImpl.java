@@ -26,14 +26,13 @@ public class EmailServiceImpl implements EmailService {
         message.setTo(to);
         message.setSubject(subject);
         message.setText(body);
-        message.setFrom(domainName);
+        message.setFrom("ab@demomailtrap.com");
         eMailSender.send(message);
-
+        System.out.println("Email sent successfully to " + to);
     }
 
     @Override
     public void sendEmailWithHtml() {
-       
         throw new UnsupportedOperationException("Unimplemented method 'sendEmailWithHtml'");
     }
 
