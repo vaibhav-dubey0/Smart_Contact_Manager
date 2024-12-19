@@ -26,7 +26,7 @@ public class EmailServiceImpl implements EmailService {
         message.setTo(to);
         message.setSubject(subject);
         message.setText(body);
-        message.setFrom("ab@demomailtrap.com");
+        message.setFrom(domainName);
         eMailSender.send(message);
         System.out.println("Email sent successfully to " + to);
     }

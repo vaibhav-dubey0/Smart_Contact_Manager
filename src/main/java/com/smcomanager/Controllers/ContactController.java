@@ -288,6 +288,24 @@ public class ContactController {
     }
 
 
+    @GetMapping("/feedback")
+    public String getFeedback() {
+        return "user/feedback";  // Returns the feedback.html page
+    }
+
+    // Handle the feedback form submission
+    @PostMapping("/feedback")
+    public String submitFeedback(String email, String feedback, Model model) {
+        // Here you can add code to handle the feedback, if needed.
+        // Since the feedback is not stored, we just show a success message for the user.
+
+        // Add success message to the model (to display after form submission)
+        model.addAttribute("submitted", true);
+        return "user/feedback";  // Redirects back to the same page
+    }
+  
+
+
 
     
 }

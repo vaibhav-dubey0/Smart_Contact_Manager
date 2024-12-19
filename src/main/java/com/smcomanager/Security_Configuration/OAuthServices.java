@@ -84,9 +84,6 @@ public class OAuthServices implements AuthenticationSuccessHandler {
             user.setAbout("This account is created using github");
         }
 
-        else if (authorizedClientRegistrationId.equalsIgnoreCase("linkedin")) {
-        }
-
         else {
             logger.info("OAuthAuthenicationSuccessHandler: Unknown provider");
         }
