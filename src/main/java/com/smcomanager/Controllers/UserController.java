@@ -72,11 +72,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.smcomanager.Helper.Message;
+import com.smcomanager.Helper.MessageType;
 import com.smcomanager.Helper.UserDetailHelper;
 import com.smcomanager.SCM_Entity.Users;
+import com.smcomanager.Services.DirectMessageService;
+import com.smcomanager.Services.FeedbackService;
 import com.smcomanager.Services.UserService;
+
+import jakarta.servlet.http.HttpSession;
+
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @Controller
 @RequestMapping("/user")
@@ -86,6 +96,12 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+   
+    @Autowired
+    private FeedbackService feedbackService;
+
+    @Autowired
+    private DirectMessageService directMessageService;
 
     @ModelAttribute
     public void addLoggedInUserInformation(Model model, Authentication authentication) {
@@ -115,4 +131,79 @@ public class UserController {
     public String getProfile() {
         return "user/profile"; // Returns the profile view
     }
+
+    @GetMapping("/do-logout")
+    public String getLogout() {
+        return "login";
+    }
+    
+
+     @GetMapping("/feedback")
+    public String getFeedback(Model model,Authentication authentication) {
+
+        return "user/feedback";  // Returns the feedback.html page
+    }
+
+    @PostMapping("/feedback")
+    public String submitFeedback(@RequestParam String name, 
+                                 @RequestParam String email, 
+                                 @RequestParam String message, 
+                                 Model model,HttpSession session) {
+
+
+                                    boolean isSaved = feedbackService.saveFeedback(name, email, message);
+
+        if (isSaved) {
+
+            session.setAttribute("message", Message.builder()
+            .content("Thankyou For Your Feedback ")
+            .type(MessageType.RED)
+            .build());
+
+        } else {
+            session.setAttribute("message", Message.builder()
+                    .content("Please Enter Valid Details  ")
+                    .type(MessageType.RED)
+                    .build());
+        }
+       
+        logger.info("Received feedback from user: {}", name);
+          
+        return "user/feedback";  // You can return to the feedback page or a confirmation page
+    }
+
+
+    // @RequestMapping("/directmessage")
+    // public String showFeedbackForm() {
+        
+    //     return "user/direct_massege";
+    // }
+
+    // @PostMapping("/directmessage")
+    // public String submitFeedback(@RequestParam("email") String email,
+    //                              @RequestParam("message") String message,
+    //                              Model model,HttpSession session) {
+
+    //                                 boolean isSent = directMessageService.sendDirectMessage(email, message);
+
+    //                                 if (isSent) {
+                            
+    //                                     session.setAttribute("message", Message.builder()
+    //                                     .content("Thankyou For Your Feedback ")
+    //                                     .type(MessageType.RED)
+    //                                     .build());
+                            
+    //                                 } else {
+    //                                     session.setAttribute("message", Message.builder()
+    //                                             .content("Please Enter Valid Details  ")
+    //                                             .type(MessageType.RED)
+    //                                             .build());
+    //                                 }
+        
+           
+
+    //     return "user/direct_massege";
+    // }
+
+   
 }
