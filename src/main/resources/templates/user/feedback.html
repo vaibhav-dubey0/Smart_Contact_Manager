@@ -25,25 +25,40 @@
           <div data-th-replace="message::messagebox" class="mb-3"></div>
           
           <!-- Feedback Form -->
-          <form action="#" th:action="@{/user/feedback}" method="post" class="space-y-6">
+          <form action="#" th:action="@{/user/feedback}" th:object="${feedbackForm}" method="post" class="space-y-6">
+            <!-- Name Field -->
             <div class="mb-4">
-              <input type="text" name="name" placeholder="Your Name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500">
+                <input type="text" th:field="*{name}" placeholder="Your Name"
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500">
+                <!-- Validation Message for Name -->
+                <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-red-500 text-sm"></div>
             </div>
-  
+        
+            <!-- Email Field -->
             <div class="mb-4">
-              <input type="email" name="email" placeholder="Your Email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500">
+                <input type="email" th:field="*{email}" placeholder="Your Email"
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500">
+                <!-- Validation Message for Email -->
+                <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-red-500 text-sm"></div>
             </div>
-  
+        
+            <!-- Message Field -->
             <div class="mb-6">
-              <textarea name="message" placeholder="Your Message" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500"></textarea>
+                <textarea th:field="*{message}" placeholder="Your Message"
+                          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500"></textarea>
+                <!-- Validation Message for Message -->
+                <div th:if="${#fields.hasErrors('message')}" th:errors="*{message}" class="text-red-500 text-sm"></div>
             </div>
-  
+        
+            <!-- Submit Button -->
             <div class="flex justify-center">
-              <button type="submit" class="mb-3 bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-300 dark:hover:bg-blue-500 w-full sm:w-auto">
-                Send Message
-              </button>
+                <button type="submit"
+                        class="mb-3 bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-300 dark:hover:bg-blue-500 w-full sm:w-auto">
+                    Send Message
+                </button>
             </div>
-          </form>
+        </form>
+        
   
           <!-- Feedback message displayed after form submission -->
           <div th:if="${feedbackMessage}" class="mt-4 text-green-600 font-semibold">

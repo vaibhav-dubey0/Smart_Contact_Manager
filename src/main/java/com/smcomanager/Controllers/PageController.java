@@ -2,6 +2,7 @@ package com.smcomanager.Controllers;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import com.smcomanager.Form_Handler.UserForm;
 import com.smcomanager.Helper.Message;
 import com.smcomanager.Helper.MessageType;
+import com.smcomanager.Helper.UserDetailHelper;
 import com.smcomanager.SCM_Entity.Users;
 import com.smcomanager.Services.UserService;
 
@@ -49,12 +51,29 @@ public String getHome() {
 
 
 @GetMapping("/about")
-public String getAbouut(){
+public String getAbouut(Model model,Authentication authentication){
+
+    if (authentication != null && authentication.isAuthenticated()) {
+        String userName = UserDetailHelper.getEmailOfLoggedInUser(authentication);
+        Users loggedInUser = userService.getUserByEmail(userName);
+
+        // Add logged-in user to the model
+        model.addAttribute("loggedInUser", loggedInUser);
+    }
     return "about";
 }
     
 @GetMapping("/services")
-public String getServices(){
+public String getServices(Model model,Authentication authentication){
+
+    if (authentication != null && authentication.isAuthenticated()) {
+        String userName = UserDetailHelper.getEmailOfLoggedInUser(authentication);
+        Users loggedInUser = userService.getUserByEmail(userName);
+
+        // Add logged-in user to the model
+        model.addAttribute("loggedInUser", loggedInUser);
+    }
+
     return "services";
 }
 
@@ -64,7 +83,14 @@ public String loginPage(){
 }
 
 @GetMapping("/contact")
-public String getContact(){
+public String getContact(Model model,Authentication authentication){
+    if (authentication != null && authentication.isAuthenticated()) {
+        String userName = UserDetailHelper.getEmailOfLoggedInUser(authentication);
+        Users loggedInUser = userService.getUserByEmail(userName);
+
+        // Add logged-in user to the model
+        model.addAttribute("loggedInUser", loggedInUser);
+    }
     return "contact";
 }
 

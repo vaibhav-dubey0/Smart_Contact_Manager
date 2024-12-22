@@ -70,11 +70,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.smcomanager.Form_Handler.FeedbackForm;
+import com.smcomanager.Form_Handler.MessageForm;
 import com.smcomanager.Helper.Message;
 import com.smcomanager.Helper.MessageType;
 import com.smcomanager.Helper.UserDetailHelper;
@@ -84,8 +88,6 @@ import com.smcomanager.Services.FeedbackService;
 import com.smcomanager.Services.UserService;
 
 import jakarta.servlet.http.HttpSession;
-
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Controller
@@ -140,18 +142,26 @@ public class UserController {
 
      @GetMapping("/feedback")
     public String getFeedback(Model model,Authentication authentication) {
-
+        model.addAttribute("feedbackForm", new FeedbackForm());
         return "user/feedback";  // Returns the feedback.html page
     }
 
     @PostMapping("/feedback")
-    public String submitFeedback(@RequestParam String name, 
-                                 @RequestParam String email, 
-                                 @RequestParam String message, 
+    public String submitFeedback(@Validated FeedbackForm feedbackForm, BindingResult result, 
                                  Model model,HttpSession session) {
 
+                                    if(result.hasErrors()){
+                                        result.getAllErrors().forEach(error -> logger.info(error.toString()));
+                                         
+                                        session.setAttribute("message", Message.builder()
+                                                .content("Please correct the following errors")
+                                                .type(MessageType.RED)
+                                                .build());
+                            
+                                                return "user/feedback";
+                                     }
 
-                                    boolean isSaved = feedbackService.saveFeedback(name, email, message);
+        boolean isSaved = feedbackService.saveFeedback(feedbackForm.getName(), feedbackForm.getEmail(), feedbackForm.getMessage());
 
         if (isSaved) {
 
@@ -159,51 +169,46 @@ public class UserController {
             .content("Thankyou For Your Feedback ")
             .type(MessageType.RED)
             .build());
-
-        } else {
-            session.setAttribute("message", Message.builder()
-                    .content("Please Enter Valid Details  ")
-                    .type(MessageType.RED)
-                    .build());
-        }
+        } 
        
-        logger.info("Received feedback from user: {}", name);
-          
+        logger.info("Received feedback from user: {}", feedbackForm.getName()); 
         return "user/feedback";  // You can return to the feedback page or a confirmation page
     }
 
 
-    // @RequestMapping("/directmessage")
-    // public String showFeedbackForm() {
-        
-    //     return "user/direct_massege";
-    // }
+    @RequestMapping("/directmessage")
+    public String showFeedbackForm(Model model) {
+        model.addAttribute("messageForm", new MessageForm());
+        return "user/direct_massege";
+    }
 
-    // @PostMapping("/directmessage")
-    // public String submitFeedback(@RequestParam("email") String email,
-    //                              @RequestParam("message") String message,
-    //                              Model model,HttpSession session) {
-
-    //                                 boolean isSent = directMessageService.sendDirectMessage(email, message);
-
-    //                                 if (isSent) {
+    @PostMapping("/directmessage")
+    public String submitFeedback(@Validated MessageForm messageForm, BindingResult result, 
+                                 Model model,HttpSession session) {
+                                    if(result.hasErrors()){
+                                        result.getAllErrors().forEach(error -> logger.info(error.toString()));
+                                         
+                                        session.setAttribute("message", Message.builder()
+                                                .content("Please correct the following errors")
+                                                .type(MessageType.RED)
+                                                .build());
                             
-    //                                     session.setAttribute("message", Message.builder()
-    //                                     .content("Thankyou For Your Feedback ")
-    //                                     .type(MessageType.RED)
-    //                                     .build());
-                            
-    //                                 } else {
-    //                                     session.setAttribute("message", Message.builder()
-    //                                             .content("Please Enter Valid Details  ")
-    //                                             .type(MessageType.RED)
-    //                                             .build());
-    //                                 }
-        
-           
+                                                return "user/direct_massege";
+                                     }
 
-    //     return "user/direct_massege";
-    // }
+                                    boolean isSent = directMessageService.sendDirectMessage(messageForm.getEmail(), messageForm.getMessage());
+
+                                    if (isSent) {
+                            
+                                        session.setAttribute("message", Message.builder()
+                                        .content("Thankyou For Your Feedback ")
+                                        .type(MessageType.RED)
+                                        .build());
+                            
+                                    }
+                                    
+        return "user/direct_massege";
+    }
 
    
 }

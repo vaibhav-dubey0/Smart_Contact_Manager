@@ -18,15 +18,87 @@
         <div data-th-replace="~{user/sidebar :: sidebar}"></div>
       </div>
 
-      <div class="sm:pl-64 pt-20" style="height: 1000px">
-        <div class="flex justify-center flex-col items-center">
-          <h1 class="text-5xl">Welcome to Dashbaord page</h1>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Consequatur, ratione!
-          </p>
+      <div class="sm:pl-64 pt-20 min-h-screen">
+        <div class="max-w-7xl mx-auto px-4">
+          <!-- Welcome Section -->
+          <div class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-bold mb-4">
+              Welcome to Dashboard Page
+            </h1>
+            <p class="mt-4">
+              Manage your profile, contacts, messages, and feedback efficiently.
+            </p>
+          </div>
+      
+          <!-- How to Use Section -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Profile Page -->
+            <div
+              class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 transition-transform transform hover:scale-105 hover:shadow-xl"
+            >
+              <h2 class="text-xl font-semibold mb-4">1. Profile Page</h2>
+              <p>
+                View logged-in user information, including profile photo, name, email,
+                and phone verification status.
+              </p>
+            </div>
+      
+            <!-- Add Contacts -->
+            <div
+              class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 transition-transform transform hover:scale-105 hover:shadow-xl"
+            >
+              <h2 class="text-xl font-semibold mb-4">2. Add Contacts</h2>
+              <p>
+                Create new contacts by providing details like name, phone number, and
+                email.
+              </p>
+            </div>
+      
+            <!-- Contacts Field -->
+            <div
+              class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 transition-transform transform hover:scale-105 hover:shadow-xl"
+            >
+              <h2 class="text-xl font-semibold mb-4">3. Contacts Field</h2>
+              <p>
+                View, update, delete, and filter created contacts. Export contact
+                details as needed.
+              </p>
+            </div>
+      
+            <!-- Direct Message -->
+            <div
+              class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 transition-transform transform hover:scale-105 hover:shadow-xl"
+            >
+              <h2 class="text-xl font-semibold mb-4">4. Direct Message</h2>
+              <p>
+                Send direct messages to stored contacts via their email addresses.
+              </p>
+            </div>
+      
+            <!-- Log Out -->
+            <div
+              class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 transition-transform transform hover:scale-105 hover:shadow-xl"
+            >
+              <h2 class="text-xl font-semibold mb-4">5. Log Out</h2>
+              <p>
+                Securely log out of your account with a single click.
+              </p>
+            </div>
+      
+            <!-- Feedback -->
+            <div
+              class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 transition-transform transform hover:scale-105 hover:shadow-xl"
+            >
+              <h2 class="text-xl font-semibold mb-4">6. Feedback</h2>
+              <p>
+                Provide feedback for any specific user by entering their contact name,
+                email ID, and feedback message.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
+      
     </div>
 
     <script>

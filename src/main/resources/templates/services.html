@@ -1,17 +1,104 @@
 <!DOCTYPE html>
-<html lang="en" th:replace="~{base :: parent(~{::#content},~{::title},~{})}">
+<html lang="en"
+th:replace="~{base :: parent(~{::#content},~{::title},~{::script})}">
   <head>
-  
-    <title>
-      Services
-    </title>
+    <title>About Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body>
-    <section id="content">
-      <h1>Welcome to services page</h1>
-      <h2>Services offered by SCM</h2>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas dolore assumenda rerum harum mollitia incidunt nesciunt dignissimos esse dicta reprehenderit quam, quisquam aspernatur enim consequatur accusamus, minima alias odit ducimus.<10></10>
-    </section>
+  <body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100">
+    <div id="content" class="mt-4">
+      <!-- Sidebar -->
+      <div th:if="${loggedInUser}">
+        <div data-th-replace="~{user/sidebar :: sidebar}"></div>
+      </div>
 
+      <!-- Main Content -->
+      <div class="pt-20"
+      th:classappend="${loggedInUser} ? 'sm:pl-64' : ''"
+      style="min-height: 100vh">
+        <div class="max-w-7xl mx-auto px-4">
+          <!-- Welcome Section -->
+          <div class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-bold mb-4 ">
+              Welcome to Services Page
+            </h1>
+            <p class="text-lg">
+              Discover all the amazing services and features offered by our
+              platform Smart Contact Manager.
+            </p>
+          </div>
+
+          <!-- Services Section -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Service 1 -->
+            <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 transition-transform transform hover:scale-105 hover:shadow-xl">
+              <h2 class="text-xl font-semibold mb-4">
+                1. Login with Google, GitHub, and Email
+              </h2>
+              <p>
+                Easily log in using your Google or GitHub accounts, or register
+                and log in using your email address. Experience secure and
+                seamless access.
+              </p>
+            </div>
+
+            <!-- Service 2 -->
+            <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 transition-transform transform hover:scale-105 hover:shadow-xl">
+              <h2 class="text-xl font-semibold mb-4">2. Email Verification</h2>
+              <p>
+                Ensure the security of your account with a one-time email
+                verification process. Verify your email to unlock full access to
+                all features.
+              </p>
+            </div>
+
+            <!-- Service 3 -->
+            <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 transition-transform transform hover:scale-105 hover:shadow-xl">
+              <h2 class="text-xl font-semibold mb-4">
+                3. Manage Contacts (Admin Feature)
+              </h2>
+              <p>
+                Admin users can add, update, view, and delete their contacts.
+                Filter and organize contact details effortlessly.
+              </p>
+            </div>
+
+            <!-- Service 4 -->
+            <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 transition-transform transform hover:scale-105 hover:shadow-xl">
+              <h2 class="text-xl font-semibold mb-4">
+                4. Send Feedback to Contacts
+              </h2>
+              <p>
+                Share your thoughts or suggestions with your contacts by
+                providing feedback directly through the platform.
+              </p>
+            </div>
+
+            <!-- Service 5 -->
+            <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 transition-transform transform hover:scale-105 hover:shadow-xl">
+              <h2 class="text-xl font-semibold mb-4">5. Email Contacts</h2>
+              <p>
+                Send emails to your stored contacts directly from the
+                application. Streamline your communication with ease.
+              </p>
+            </div>
+
+            <!-- Service 6 -->
+            <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 transition-transform transform hover:scale-105 hover:shadow-xl">
+              <h2 class="text-xl font-semibold mb-4">6. Data Security</h2>
+              <p>
+                Your data is secure with us. We prioritize your privacy and
+                ensure all information is stored and handled safely.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      console.log("This is the About page.");
+    </script>
   </body>
 </html>
+

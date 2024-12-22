@@ -1,12 +1,87 @@
 <!DOCTYPE html>
-<html lang="en" th:replace="~{base :: parent(~{::#cont},~{::title},~{})}" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+  th:replace="~{base :: parent(~{::#content},~{::title},~{::script})}">
 <head>
-    <title> Services </title>
+  <title>Contact Page</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <section id="cont" class=" mt-20">
-        <h2>This is Contact Page</h2>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum, vel. Rerum saepe voluptate aliquam consectetur, facere iure cumque! Harum a dolor dolores voluptatem ut sapiente, reiciendis eveniet cumque eos in?</p>
-    </section>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100">
+  <div id="content" class="mt-4">
+    <!-- Sidebar -->
+    <div th:if="${loggedInUser}">
+      <div data-th-replace="~{user/sidebar :: sidebar}"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="pt-20"
+         th:classappend="${loggedInUser} ? 'sm:pl-64' : ''"
+         style="min-height: 100vh">
+      <div class="max-w-7xl mx-auto px-4">
+        <!-- Welcome Section -->
+        <div class="text-center mb-10">
+          <h1 class="text-3xl sm:text-5xl font-bold mb-4">
+            Welcome to Contact Page
+          </h1>
+        </div>
+
+        <!-- Contact Section -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <!-- Address -->
+          <div class="flex items-center bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl">
+            <i class="fas fa-map-marker-alt text-4xl text-blue-600 mr-6"></i>
+            <div>
+              <h3 class="text-xl font-semibold mb-2">Address</h3>
+              <p>Vaibhav Dubey<br>
+                Village-Nuwao, Post-Sandwa<br>
+                Mirzapur, Uttar Pradesh<br>
+                231001</p>
+                
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div class="flex items-center bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl">
+            <i class="fas fa-envelope text-4xl text-green-600 mr-6"></i>
+            <div>
+              <h3 class="text-xl font-semibold mb-2">Email</h3>
+              <p><a href="mailto:dubeyvaibhav482@gmail.com" class="hover:underline">dubeyvaibhav482@gmail.com</a></p>
+            </div>
+          </div>
+
+          <!-- Mobile -->
+          <div class="flex items-center bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl">
+            <i class="fas fa-phone-alt text-4xl text-yellow-600 mr-6"></i>
+            <div>
+              <h3 class="text-xl font-semibold mb-2">Mobile</h3>
+              <p><a href="tel:+911234567890" class="hover:underline">+91 9569852442</a></p>
+            </div>
+          </div>
+
+          <!-- Social Media -->
+          <div class="flex flex-col bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl">
+            <h3 class="text-xl font-semibold mb-4">Social Media</h3>
+            <div class="flex items-center space-x-4">
+              <a href="https://www.linkedin.com/in/vaibhav-dubey-3a418b253/" target="_blank" class="flex items-center text-blue-700 hover:text-blue-500">
+                <i class="fab fa-linkedin text-3xl mr-2"></i>
+                <span>LinkedIn</span>
+              </a>
+              <a href="https://github.com/vaibhav-dubey0" target="_blank" class="flex items-center text-gray-700 hover:text-gray-500">
+                <i class="fab fa-github text-3xl mr-2"></i>
+                <span>GitHub</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FontAwesome for Icons -->
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+  <script>
+    console.log("This is the Contact page.");
+  </script>
 </body>
 </html>
+

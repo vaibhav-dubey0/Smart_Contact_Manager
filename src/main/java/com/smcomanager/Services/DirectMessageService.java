@@ -1,14 +1,14 @@
-// package com.smcomanager.Services;
+package com.smcomanager.Services;
 
-// import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Service;
 
-// @Service
-// public class DirectMessageService {
+@Service
+public class DirectMessageService {
     
-//     public boolean sendDirectMessage( String receiverEmail, String message) {
+    public boolean sendDirectMessage( String receiverEmail, String message) {
        
 
-//         return true; 
-//     }
+        return true; 
+    }
 
-// }
+}
