@@ -35,7 +35,6 @@ public class UserDetailHelper {
                         : oauth2User.getAttribute("login").toString() + "@gmail.com";
             }
 
-            // sign with facebook
             return username;
 
         } else {
