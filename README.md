@@ -1,0 +1,1 @@
+full-stack Smart Contact Manager application using Java Spring Boot as the backend. The application includes features such as user authentication via Google/GitHub, email integration, and comprehensive contact management
